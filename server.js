@@ -14,12 +14,15 @@ app.get("/pay", (req, res) => {
   const productinfo = "Test Payment";
   const firstname = "Karan";
   const email = "test@test.com";
+  const phone = "9999999999";
+
+  const surl = "https://upi-backend-orxf.onrender.com/success";
+  const furl = "https://upi-backend-orxf.onrender.com/failure";
 
   const hashString = `${PAYU_KEY}|${txnid}|${amount}|${productinfo}|${firstname}|${email}|||||||||||${PAYU_SALT}`;
 
   const hash = crypto.createHash("sha512").update(hashString).digest("hex");
 
-  // Auto submit HTML form to PayU
   res.send(`
     <html>
       <body onload="document.forms[0].submit()">
@@ -30,6 +33,9 @@ app.get("/pay", (req, res) => {
           <input type="hidden" name="productinfo" value="${productinfo}" />
           <input type="hidden" name="firstname" value="${firstname}" />
           <input type="hidden" name="email" value="${email}" />
+          <input type="hidden" name="phone" value="${phone}" />
+          <input type="hidden" name="surl" value="${surl}" />
+          <input type="hidden" name="furl" value="${furl}" />
           <input type="hidden" name="pg" value="UPI" />
           <input type="hidden" name="bankcode" value="UPI" />
           <input type="hidden" name="hash" value="${hash}" />
@@ -40,5 +46,5 @@ app.get("/pay", (req, res) => {
 });
 
 app.listen(5000, () => {
-  console.log("PayU Test Server running at http://localhost:5000/pay");
+  console.log("PayU server running");
 });
