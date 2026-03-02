@@ -2,7 +2,6 @@ import express from "express";
 import crypto from "crypto";
 
 const app = express();
-app.use(express.urlencoded({ extended: true }));
 
 const PAYU_KEY = "G0Ddxo";
 const PAYU_SALT = "ARUo9bWH25TlOV3OdcvkKBspX3wqIrc5";
@@ -11,7 +10,7 @@ const PAYU_BASE_URL = "https://test.payu.in/_payment";
 app.get("/pay", (req, res) => {
   const txnid = "TXN" + Date.now();
   const amount = "100.00";
-  const productinfo = "Test Payment";
+  const productinfo = "UPI Only Payment";
   const firstname = "Karan";
   const email = "test@test.com";
   const phone = "9999999999";
@@ -36,8 +35,11 @@ app.get("/pay", (req, res) => {
           <input type="hidden" name="phone" value="${phone}" />
           <input type="hidden" name="surl" value="${surl}" />
           <input type="hidden" name="furl" value="${furl}" />
+
+          <!-- FORCE UPI ONLY -->
           <input type="hidden" name="pg" value="UPI" />
           <input type="hidden" name="bankcode" value="UPI" />
+
           <input type="hidden" name="hash" value="${hash}" />
         </form>
       </body>
@@ -45,6 +47,14 @@ app.get("/pay", (req, res) => {
   `);
 });
 
+app.post("/success", (req, res) => {
+  res.send("Payment Success");
+});
+
+app.post("/failure", (req, res) => {
+  res.send("Payment Failed");
+});
+
 app.listen(5000, () => {
-  console.log("PayU server running");
+  console.log("UPI-only PayU server running");
 });
